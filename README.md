@@ -31,4 +31,7 @@ You can set the labels at any time:
     $('#to_decorate').taggy({tags : ["hi"]}).taggy('tags', ["bye"])
     $('#to_decorate').val()          -> "bye"
 
+You can add and remove tags:
 
+    $('#to_decorate').taggy('addTag', "new tag");
+    $('#to_decorate').taggy('removeTag', "old tag");

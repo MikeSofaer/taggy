@@ -49,10 +49,38 @@ describe("Taggy", function() {
     it("should return the tags passed", function(){
       expect(startingInput.taggy({tags : ["a", "b"]}).taggy('tags')).toEqual(["a", "b"]);
     });
-    it("should set the labels if labels are passed", function(){
+    it("should set the tags if tags are passed", function(){
       startingInput.taggy({tags : ["a", "b"]}).taggy('tags', ["c", "d"])
       expect(startingInput.taggy('tags')).toEqual(["c", "d"]);
       expect(startingInput.val()).toEqual("c,d");
+    });
+  });
+  describe("addTag", function(){
+    it("should add the new tag if a value is passed", function(){
+      startingInput.taggy({tags : ["a", "b"]}).taggy('addTag', "c");
+      expect(startingInput.taggy('tags')).toEqual(["a", "b", "c"]);
+    });
+    it("shouldn't screw up if no value is passed", function(){
+      startingInput.taggy({tags : ["a", "b", "c"]}).taggy('addTag');
+      expect(startingInput.taggy('tags')).toEqual(["a", "b", "c"]);
+    });
+    it("shouldn't add a duplicate", function(){
+      startingInput.taggy({tags : ["a", "b"]}).taggy('addTag', "b");
+      expect(startingInput.taggy('tags')).toEqual(["a", "b"]);
+    });
+  });
+  describe("removeTag", function(){
+    it("should remove the new tag if a value is passed", function(){
+      startingInput.taggy({tags : ["a", "b", "c"]}).taggy('removeTag', "c");
+      expect(startingInput.taggy('tags')).toEqual(["a", "b"]);
+    });
+    it("shouldn't screw up if no value is passed", function(){
+      startingInput.taggy({tags : ["a", "b", "c"]}).taggy('removeTag');
+      expect(startingInput.taggy('tags')).toEqual(["a", "b", "c"]);
+    });
+    it("shouldn't screw up if non-present value is passed", function(){
+      startingInput.taggy({tags : ["a", "b", "c"]}).taggy('removeTag', "d");
+      expect(startingInput.taggy('tags')).toEqual(["a", "b", "c"]);
     });
   });
 });
