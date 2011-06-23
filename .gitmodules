@@ -1,0 +1,6 @@
+[submodule "jasmine-node"]
+	path = jasmine-node
+	url = git://github.com/mhevery/jasmine-node.git
+[submodule "jsdom"]
+	path = jsdom
+	url = git://github.com/tmpvar/jsdom.git
