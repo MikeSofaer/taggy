@@ -6,9 +6,12 @@ describe("Taggy", function() {
     expect(element[0].style.display).toBeUndefined;
   }
 
+  var wrapperDiv;
   var startingInput;
   beforeEach(function setupDom(){
+    wrapperDiv = $('<div/>');
     startingInput = $('<input/>');
+    wrapperDiv.append(startingInput);
   });
 
   describe("initialization", function() {
@@ -52,7 +55,7 @@ describe("Taggy", function() {
     it("should set the tags if tags are passed", function(){
       startingInput.taggy({tags : ["a", "b"]}).taggy('tags', ["c", "d"])
       expect(startingInput.taggy('tags')).toEqual(["c", "d"]);
-      expect(startingInput.val()).toEqual("c,d");
+    expect(startingInput.val()).toEqual("c,d");
     });
   });
   describe("addTag", function(){
@@ -69,6 +72,7 @@ describe("Taggy", function() {
       expect(startingInput.taggy('tags')).toEqual(["a", "b"]);
     });
   });
+
   describe("removeTag", function(){
     it("should remove the new tag if a value is passed", function(){
       startingInput.taggy({tags : ["a", "b", "c"]}).taggy('removeTag', "c");
@@ -81,6 +85,106 @@ describe("Taggy", function() {
     it("shouldn't screw up if non-present value is passed", function(){
       startingInput.taggy({tags : ["a", "b", "c"]}).taggy('removeTag', "d");
       expect(startingInput.taggy('tags')).toEqual(["a", "b", "c"]);
+    });
+  });
+
+  describe("selection", function(){
+    beforeEach(function(){
+      startingInput.taggy({tags : ["a", "b", "c"]});
+    });
+    it("should select the desired tag", function(){
+      expect(startingInput.taggy('selection', "a").taggy('selection')).toBe("a");
+    });
+    it("should not let you select a tag that's not there", function(){
+      expect(startingInput.taggy('selection', "missing").taggy('selection')).toBeUndefined();
+    });
+    it("should let you clear the selection", function(){
+      expect(startingInput.taggy('selection', "a").taggy('selection', null).taggy('selection')).toBeNull();
+    });
+  });
+
+  describe("selectNext", function(){
+    beforeEach(function(){
+      startingInput.taggy({tags : ["a", "b", "c"]});
+    });
+    it("should select the next tag", function(){
+      expect(startingInput.taggy('selection', "a").taggy('selectNext').taggy('selection')).toBe("b");
+    });
+    it("should not let you select a tag that's not there", function(){
+      expect(startingInput.taggy('selection', "c").taggy('selectNext').taggy('selection')).toBeNull();
+    });
+  });
+
+  describe("selectPrev", function(){
+    beforeEach(function(){
+      startingInput.taggy({tags : ["a", "b", "c"]});
+    });
+    it("should select the previous tag", function(){
+      expect(startingInput.taggy('selection', "b").taggy('selectPrev').taggy('selection')).toBe("a");
+    });
+    it("should stick on the first tag", function(){
+      expect(startingInput.taggy('selection', "a").taggy('selectPrev').taggy('selection')).toBe("a");
+    });
+  });
+
+  describe("visible elements", function(){
+    it("should create a div for the visible elements", function(){
+      startingInput.taggy();
+      expect(startingInput.siblings('div.taggy').length).toBe(1);
+    });
+    describe("tag list", function() {
+      beforeEach(function(){
+        startingInput.taggy({tags : ["a", "b"]});
+      });
+      it("should create a ul for the tags", function(){
+        expect(startingInput.siblings('div.taggy').find('ul').length).toBe(1);
+      });
+      it("should create an li for each tag", function(){
+        var lis = startingInput.siblings('div.taggy').find('ul li');
+        expect(lis.length).toBe(2);
+        expect($.map(lis, function(li){return $(li).data('tag')})).toEqual(["a", "b"]);
+      });
+      it("should create an a tag for each li", function(){
+        var removeLinks = startingInput.siblings('div.taggy').find('ul li a.taggy-remove-tag');
+        expect(removeLinks.length).toBe(2);
+      });
+    });
+    describe("visible input", function(){
+      it("should create a visible input field", function(){
+        assertVisible(startingInput.taggy().siblings('div.taggy').find('input.taggy-new-tag'));
+      });
+    });
+  });
+
+  describe("Adding tags", function(){
+    var visibleInput;
+    beforeEach(function(){
+      startingInput.taggy({tags : ["a", "b"]});
+      visibleInput = startingInput.siblings('div.taggy').find('input.taggy-new-tag');
+    });
+    it("should add a tag on Enter", function(){
+      visibleInput.val('c');
+      var event = $.Event('keydown');
+      event.keyCode = $.ui.keyCode.ENTER;
+      visibleInput.trigger(event);
+      expect(startingInput.taggy('tags')).toEqual(["a","b","c"]);
+    });
+    it("should clear the field on Enter", function(){
+      visibleInput.val('c');
+      var event = $.Event('keydown');
+      event.keyCode = $.ui.keyCode.ENTER;
+      visibleInput.trigger(event);
+      expect(visibleInput.val()).toBe('');
+    });
+  });
+  describe("Removing tags", function(){
+    beforeEach(function(){
+      startingInput.taggy({tags : ["to remove", "to leave"]});
+    });
+    it("should remove the tag on click", function(){
+      var ul = startingInput.siblings('div.taggy').find('ul');
+      ul.find('li:contains("to remove") a.taggy-remove-tag').click();
+      expect(startingInput.taggy('tags')).toEqual(["to leave"]);
     });
   });
 });
