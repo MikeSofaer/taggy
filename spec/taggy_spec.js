@@ -125,6 +125,10 @@ describe("Taggy", function() {
     it("should stick on the first tag", function(){
       expect(startingInput.taggy('selection', "a").taggy('selectPrev').taggy('selection')).toBe("a");
     });
+    it("should select the last tag when nothing is selected", function(){
+      expect(startingInput.taggy('selectPrev').taggy('selection')).toBe("c");
+      
+    });
   });
 
   describe("visible elements", function(){
@@ -185,6 +189,50 @@ describe("Taggy", function() {
       var ul = startingInput.siblings('div.taggy').find('ul');
       ul.find('li:contains("to remove") a.taggy-remove-tag').click();
       expect(startingInput.taggy('tags')).toEqual(["to leave"]);
+    });
+  });
+
+  describe("selecting UI", function(){
+    var visibleInput;
+    var selectedLi;
+    beforeEach(function(){
+      startingInput.taggy({tags : ["first", "middle", "last"]});
+      visibleInput = startingInput.siblings('div.taggy').find('input.taggy-new-tag');
+    });
+    describe("while a tag is selected", function(){
+      beforeEach(function(){
+        startingInput.taggy('selection', "middle");
+        selectedLi = startingInput.siblings('div.taggy').find('li:contains("middle")');
+      });
+      it("should select next when you hit the right arrow key", function(){
+        var event = $.Event('keydown');
+        event.keyCode = $.ui.keyCode.RIGHT;
+        selectedLi.trigger(event);
+        expect(startingInput.taggy('selection')).toBe("last");
+      });
+      it("should select previous when you hit the left arrow key", function(){
+        var event = $.Event('keydown');
+        event.keyCode = $.ui.keyCode.LEFT;
+        selectedLi.trigger(event);
+        expect(startingInput.taggy('selection')).toBe("first");
+      });
+    });
+    describe("left arrow on input", function(){
+      it("should select the last tag if the input field is empty", function(){
+        var event = $.Event('keydown');
+        event.keyCode = $.ui.keyCode.LEFT;
+        visibleInput.trigger(event);
+        expect(startingInput.taggy('selection')).toBe("last");
+
+      });
+      it("should not select any tag if the input field has text", function(){
+        var event = $.Event('keydown');
+        event.keyCode = $.ui.keyCode.LEFT;
+        visibleInput.val("tag witt a typo");
+        visibleInput.trigger(event);
+        expect(startingInput.taggy('selection')).toBeUndefined();
+
+      });
     });
   });
 });
