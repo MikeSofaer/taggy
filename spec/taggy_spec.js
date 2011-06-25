@@ -127,7 +127,6 @@ describe("Taggy", function() {
     });
     it("should select the last tag when nothing is selected", function(){
       expect(startingInput.taggy('selectPrev').taggy('selection')).toBe("c");
-      
     });
   });
 
@@ -188,6 +187,13 @@ describe("Taggy", function() {
     it("should remove the tag on click", function(){
       var ul = startingInput.siblings('div.taggy').find('ul');
       ul.find('li:contains("to remove") a.taggy-remove-tag').click();
+      expect(startingInput.taggy('tags')).toEqual(["to leave"]);
+    });
+    it("should remove the selected tag on backspace", function(){
+      startingInput.taggy('selection', 'to remove');
+      var event = $.Event('keydown');
+      event.keyCode = $.ui.keyCode.BACKSPACE;
+      startingInput.siblings('div.taggy').find('ul').trigger(event);
       expect(startingInput.taggy('tags')).toEqual(["to leave"]);
     });
   });
