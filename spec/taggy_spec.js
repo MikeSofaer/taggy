@@ -196,6 +196,23 @@ describe("Taggy", function() {
       startingInput.siblings('div.taggy').find('ul').trigger(event);
       expect(startingInput.taggy('tags')).toEqual(["to leave"]);
     });
+    it("should select the previous tag on backspace", function(){
+      startingInput.taggy('tags', ['before', 'to remove', 'after']);
+      startingInput.taggy('selection', 'to remove');
+      var event = $.Event('keydown');
+      event.keyCode = $.ui.keyCode.BACKSPACE;
+      startingInput.siblings('div.taggy').find('ul').trigger(event);
+      expect(startingInput.taggy('selection')).toBe("before");
+      expect(startingInput.taggy('tags')).toEqual(["before", "after"]);
+    });
+    it("should select the next tag on backspace on the first tag", function(){
+      startingInput.taggy('tags', ['to remove', 'after']);
+      startingInput.taggy('selection', 'to remove');
+      var event = $.Event('keydown');
+      event.keyCode = $.ui.keyCode.BACKSPACE;
+      startingInput.siblings('div.taggy').find('ul').trigger(event);
+      expect(startingInput.taggy('selection')).toBe("after");
+    });
   });
 
   describe("selecting UI", function(){
