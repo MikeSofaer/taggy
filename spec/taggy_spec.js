@@ -277,5 +277,27 @@ describe("Taggy", function() {
       expect(event.isDefaultPrevented()).toBe(true);
     });
   });
+
+  describe("Click Handler", function(){
+    var holder;
+    var ul;
+    beforeEach(function(){
+      startingInput.taggy({
+        tags : ["first tag", "second tag"],
+        click : function(tag) { holder = tag },
+      });
+      ul = startingInput.siblings('div.taggy').find('ul');
+      holder = null;
+    });
+    it("should fire the handler when the li is clicked", function(){
+      ul.find('li:contains("first tag")').click();
+      expect(holder).toBe("first tag");
+    });
+    it("should not fire the handler when the remove link is clicked", function(){
+      ul.find('li:contains("first tag") a').click();
+      expect(holder).toBeNull();
+    });
+  });
+
 });
 
