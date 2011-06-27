@@ -246,7 +246,6 @@ describe("Taggy", function() {
         event.keyCode = $.ui.keyCode.LEFT;
         visibleInput.trigger(event);
         expect(startingInput.taggy('selection')).toBe("last");
-
       });
       it("should not select any tag if the input field has text", function(){
         var event = $.Event('keydown');
@@ -254,8 +253,28 @@ describe("Taggy", function() {
         visibleInput.val("tag witt a typo");
         visibleInput.trigger(event);
         expect(startingInput.taggy('selection')).toBeUndefined();
-
       });
+    });
+  });
+
+  describe("Tab key", function(){
+    var visibleInput;
+    var event;
+    beforeEach(function(){
+      event = $.Event('keydown');
+      event.keyCode = $.ui.keyCode.TAB;
+      startingInput.taggy();
+      visibleInput = startingInput.siblings('div.taggy').find('input.taggy-new-tag');
+    });
+    it("Should leave the field on tab if the field is empty", function(){
+      visibleInput.val('');
+      visibleInput.trigger(event);
+      expect(event.isDefaultPrevented()).toBe(false);
+    });
+    it("Should not leave the field on tab if the field is not empty", function(){
+      visibleInput.val('blah');
+      visibleInput.trigger(event);
+      expect(event.isDefaultPrevented()).toBe(true);
     });
   });
 });
