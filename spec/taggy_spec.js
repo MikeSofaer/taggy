@@ -271,7 +271,7 @@ describe("Taggy", function() {
       expect(startingInput.taggy('tags')).toEqual([]);
       expect(event.isDefaultPrevented()).toBe(false);
     });
- 
+
   });
   describe("Removing tags", function(){
     beforeEach(function(){
@@ -306,6 +306,23 @@ describe("Taggy", function() {
       startingInput.siblings('div.taggy').find('ul').trigger(event);
       expect(startingInput.taggy('selection')).toBe("after");
     });
+    it("should remove only one tag on double backspace", function(){
+      startingInput.taggy('selection', 'to remove');
+      var event = $.Event('keydown');
+      event.keyCode = $.ui.keyCode.BACKSPACE;
+      startingInput.siblings('div.taggy').find('ul').trigger(event).trigger(event);
+      expect(startingInput.taggy('tags')).toEqual(["to leave"]);
+    });
+    it("should remove two tags on double backspace with a keyup", function(){
+      startingInput.taggy('selection', 'to remove');
+      var event = $.Event('keydown');
+      event.keyCode = $.ui.keyCode.BACKSPACE;
+      var eventUp = $.Event('keyup');
+      eventUp.keyCode = $.ui.keyCode.BACKSPACE;
+      startingInput.siblings('div.taggy').find('ul').trigger(event).trigger(eventUp).trigger(event);
+      expect(startingInput.taggy('tags')).toEqual([]);
+    });
+
   });
 
   describe("selecting UI", function(){
