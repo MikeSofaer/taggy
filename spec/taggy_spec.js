@@ -261,6 +261,17 @@ describe("Taggy", function() {
       expect(startingInput.taggy('tags')).toEqual(["new tag"]);
       expect(event.isDefaultPrevented()).toBe(true);
     });
+    it("doesn't enter commands when shift is pressed", function(){
+      startingInput.taggy({ additionalKeyCodes : [$.ui.keyCode.COMMA] });
+      event = $.Event('keydown');
+      event.keyCode = $.ui.keyCode.COMMA;
+      event.shiftKey = true;
+      var visibleInput = startingInput.siblings('div.taggy').find('input.taggy-new-tag');
+      visibleInput.val("new tag").trigger(event);
+      expect(startingInput.taggy('tags')).toEqual([]);
+      expect(event.isDefaultPrevented()).toBe(false);
+    });
+ 
   });
   describe("Removing tags", function(){
     beforeEach(function(){
