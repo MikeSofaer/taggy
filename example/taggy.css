@@ -34,6 +34,7 @@ div.taggy input.taggy-new-tag {
 }
 
 div.taggy ul {
+  width               : 400px;
   border              : 1px solid #999;
   box-shadow          : 0 2px 4px #999;
   border-radius       :3px;
@@ -43,4 +44,15 @@ div.taggy {
   width               : 400px;
 }
 
+ul.ui-menu {
+  width               : 400px;
+  border              : 1px solid black;
+}
 
+ul.ui-menu li {
+  list-style-type: none;
+}
+
+a#ui-active-menuitem {
+  background-color    : #DDDDDD;
+}
