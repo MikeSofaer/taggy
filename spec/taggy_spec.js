@@ -350,7 +350,7 @@ describe("Taggy", function() {
     beforeEach(function(){
       event = $.Event('keydown');
       event.keyCode = $.ui.keyCode.TAB;
-      startingInput.taggy();
+      startingInput.taggy({additionalKeyCodes : [$.ui.keyCode.TAB]});
       visibleInput = startingInput.siblings('div.taggy').find('input.taggy-new-tag');
     });
     it("Should leave the field on tab if the field is empty", function(){
