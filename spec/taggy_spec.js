@@ -251,6 +251,14 @@ describe("Taggy", function() {
     });
   });
 
+  describe("whitespace", function(){
+    it("should not let you input empty tags", function(){
+      expect(startingInput.taggy({tags : ["a", "b"]}).taggy('addTag', "   ").taggy('tags')).toEqual(["a", "b"]);
+    });
+    it("should trim whitespace", function(){
+      expect(startingInput.taggy({tags : ["a", "b"]}).taggy('addTag', "   c   ").taggy('tags')).toEqual(["a", "b", "c"]);
+    });
+  });
   describe("extra command characters", function(){
     it("lets you set extra charaters", function(){
       startingInput.taggy({ additionalKeyCodes : [$.ui.keyCode.COMMA] });
