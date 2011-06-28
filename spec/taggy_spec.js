@@ -423,20 +423,19 @@ describe("Taggy", function() {
         availableTags : function availableTags(){
                           avaiableTagsCalled = true;
                           return ["tag 1", "tag 2", "tag 3"];
-                        }
+                        },
+        autocompleteOptions : {
+                        minLength : 0
+                              },
       });
       visibleInput = startingInput.siblings('div.taggy').find('input.taggy-new-tag');
     });
     it("should decorate the input", function(){
       expect(visibleInput.data('autocomplete')).toBeTruthy();
     });
-    // it("should call the available tags callback on search", function(){
-      // visibleInput.autocomplete("search");
-      // var source = visibleInput.data('autocompleteSource');
-      // console.log(source);
-      // source();
-      // expect(availableTagsCalled).toBe(true);
-    // });
+    it("should pass options through", function(){
+      expect(visibleInput.autocomplete('option', 'minLength')).toBe(0);
+    });
   });
 
 });
