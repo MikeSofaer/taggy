@@ -240,8 +240,16 @@ describe("Taggy", function() {
       event.keyCode = $.ui.keyCode.ENTER;
       visibleInput.trigger(event);
       expect(startingInput.taggy('tags')).toEqual(["a","b","hello"]);
-
     });
+    it("should add a tag and clear on select", function(){
+      visibleInput.val('c');
+      var event = $.Event('autocompleteselect');
+      visibleInput.trigger(event, { item : {value : "c"}});
+      expect(startingInput.taggy('tags')).toEqual(["a","b","c"]);
+      expect(visibleInput.val()).toBe('');
+      expect(event.isDefaultPrevented()).toBe(true);
+    });
+
   });
   describe("Removing tags", function(){
     beforeEach(function(){
