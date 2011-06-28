@@ -10,7 +10,7 @@ describe("Taggy", function() {
   var startingInput;
   beforeEach(function setupDom(){
     wrapperDiv = $('<div/>');
-    startingInput = $('<input/>');
+    startingInput = $('<input id="tags"/>');
     wrapperDiv.append(startingInput);
   });
 

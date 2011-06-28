@@ -9,11 +9,20 @@
   <hr/>
   <p>Some tags for you:</p>
   <input id="tags"/>
+  <p>Another set of tags for you:</p>
+  <input id="tags2"/>
+
   <script>
     $('#tags').taggy({
       tags : ["one", "two", "pony"],
       availableTags : function(){ return ["once", "before", "highly magnetic"]},
       additionalKeyCodes : [$.ui.keyCode.TAB, $.ui.keyCode.COMMA],
     });
+    $('#tags2').taggy({
+      tags : ["kittens", "unicorns", "bacon"],
+      availableTags : function(){ return ["hello", "focus on the target", "ceci n'est pas une tag"]},
+      additionalKeyCodes : [$.ui.keyCode.TAB, $.ui.keyCode.COMMA],
+    });
+
   </script>
 </body>
