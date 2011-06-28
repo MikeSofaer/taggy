@@ -249,7 +249,18 @@ describe("Taggy", function() {
       expect(visibleInput.val()).toBe('');
       expect(event.isDefaultPrevented()).toBe(true);
     });
+  });
 
+  describe("extra command characters", function(){
+    it("lets you set extra charaters", function(){
+      startingInput.taggy({ additionalKeyCodes : [$.ui.keyCode.TAB] });
+      event = $.Event('keydown');
+      event.keyCode = $.ui.keyCode.TAB;
+      var visibleInput = startingInput.siblings('div.taggy').find('input.taggy-new-tag');
+      visibleInput.val("new tag").trigger(event);
+      expect(startingInput.taggy('tags')).toEqual(["new tag"]);
+      expect(event.isDefaultPrevented()).toBe(true);
+    });
   });
   describe("Removing tags", function(){
     beforeEach(function(){

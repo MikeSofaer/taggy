@@ -45,3 +45,6 @@ You can select tags:
     $('#to_decorate').taggy('selectPrev');
 
 Selections roll off the end, and stick at the front
+
+By default, enter adds tags, you can make other characters add tags by adding to additionalKeyCodes
+     $('#to_decorate').taggy({ additionalKeyCodes : [$.ui.keyCode.TAB] });
