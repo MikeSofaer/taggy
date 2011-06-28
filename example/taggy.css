@@ -1,0 +1,55 @@
+div.taggy li {
+  font-size           : 14px;
+  font-family         : Arial;
+  line-height         : 12px;
+  margin-top          : 5px;
+  margin-right        : 3px;
+  margin-bottom       : 3px;
+  padding             : 3px 20px 3px 5px;
+  background-color    : #588A00;
+  color               : white;
+  cursor              : pointer;
+  border-radius       : 3px;
+  display             : inline-block;
+}
+
+div.taggy li.active,
+div.taggy li:hover {
+  background-color    : #3C6000;
+}
+
+a.taggy-remove-tag {
+  font-family         : monospace;
+  font-size           : 12px;
+  line-height         : 10px;
+  color               : #333333;
+  top                 : 3px;
+  right               : 0;
+  height              : 12px;
+  margin-left         : 3px;
+  padding             : 0 5px;
+}
+
+div.taggy input.taggy-new-tag {
+}
+
+div.taggy ul {
+  border              : 1px solid #999;
+  box-shadow          : 0 2px 4px #999;
+  border-radius       :3px;
+}
+
+div.taggy {
+  color               : #FFF;
+  margin              : 10px 0;
+  overflow            : hidden;
+  background-clip     : border-box;
+  background-origin   : content-box;
+  border              : 1px solid #999;
+  border-radius       : 3px;
+  padding             : 5px;
+  width               : 400px;
+  box-shadow          : 0 1px 0 #FFF;
+}
+
+

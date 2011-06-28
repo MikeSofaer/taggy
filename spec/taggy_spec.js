@@ -57,6 +57,10 @@ describe("Taggy", function() {
       expect(startingInput.taggy('tags')).toEqual(["c", "d"]);
     expect(startingInput.val()).toEqual("c,d");
     });
+    it("should highlight the selected tag", function(){
+      startingInput.taggy({tags : ["a", "b"]}).taggy('selection', "a").taggy('tags', ["a"]);
+      expect(startingInput.siblings('div.taggy').find('li.active').length).toBe(1);
+     });
   });
   describe("addTag", function(){
     it("should add the new tag if a value is passed", function(){
@@ -71,6 +75,11 @@ describe("Taggy", function() {
       startingInput.taggy({tags : ["a", "b"]}).taggy('addTag', "b");
       expect(startingInput.taggy('tags')).toEqual(["a", "b"]);
     });
+    it("should handle tags of more than one character", function(){
+      startingInput.taggy({tags : ["a", "b"]}).taggy('addTag', "hello");
+      expect(startingInput.taggy('tags')).toEqual(["a","b","hello"]);
+    });
+
   });
 
   describe("removeTag", function(){
@@ -85,6 +94,10 @@ describe("Taggy", function() {
     it("shouldn't screw up if non-present value is passed", function(){
       startingInput.taggy({tags : ["a", "b", "c"]}).taggy('removeTag', "d");
       expect(startingInput.taggy('tags')).toEqual(["a", "b", "c"]);
+    });
+    it("should let you remove a tag if it is the only tag", function(){
+      startingInput.taggy({tags : ["a"]}).taggy('removeTag', "a");
+      expect(startingInput.taggy('tags')).toEqual([]);
     });
   });
 
@@ -101,7 +114,30 @@ describe("Taggy", function() {
     it("should let you clear the selection", function(){
       expect(startingInput.taggy('selection', "a").taggy('selection', null).taggy('selection')).toBeNull();
     });
-  });
+    it("should apply the 'active' class to the corresponding li", function(){
+      var ul = startingInput.siblings('div.taggy').find('ul');
+      startingInput.taggy('selection', "a");
+      expect($.map(ul.find('li'), function(li){
+        return $(li).hasClass('active');
+      }))
+      .toEqual([true, false, false]);
+      startingInput.taggy('selection', "b");
+      expect($.map(ul.find('li'), function(li){
+        return $(li).hasClass('active');
+      }))
+      .toEqual([false, true, false]);
+    });
+    it("shouldn't select multiple if one tag name contains the other", function(){
+      startingInput.taggy('tags', ["cats", "buttercats"]);
+      startingInput.taggy('selection', "cats");
+      var ul = startingInput.siblings('div.taggy').find('ul');
+      expect($.map(ul.find('li'), function(li){
+        return $(li).hasClass('active');
+      }))
+      .toEqual([true, false]);
+    });
+
+ });
 
   describe("selectNext", function(){
     beforeEach(function(){
@@ -113,6 +149,25 @@ describe("Taggy", function() {
     it("should not let you select a tag that's not there", function(){
       expect(startingInput.taggy('selection', "c").taggy('selectNext').taggy('selection')).toBeNull();
     });
+    it("should not select a tag if there is no selected tag", function() {
+      expect(startingInput.taggy('selectNext').taggy('selection')).toBeUndefined();
+    });
+    it("should clear the highlighting when you arrow off the end", function(){
+      startingInput.taggy('selection', "c").taggy('selectNext');
+      var ul = startingInput.siblings('div.taggy').find('ul');
+      expect($.map(ul.find('li'), function(li){
+        return $(li).hasClass('active');
+      }))
+      .toEqual([false, false, false]);
+    });
+    it("should highlight the visible input when you arrow off the end", function(){
+      var visibleInput = startingInput.siblings('div.taggy').find('input.taggy-new-tag');
+      var focused = null;
+      visibleInput.focus(function(){focused = true});
+      startingInput.taggy('selection', "c").taggy('selectNext');
+      expect(focused).toBe(true);
+    });
+
   });
 
   describe("selectPrev", function(){
@@ -178,6 +233,14 @@ describe("Taggy", function() {
       event.keyCode = $.ui.keyCode.ENTER;
       visibleInput.trigger(event);
       expect(visibleInput.val()).toBe('');
+    });
+    it("should handle tags more than one character long", function(){
+      visibleInput.val('hello');
+      var event = $.Event('keydown');
+      event.keyCode = $.ui.keyCode.ENTER;
+      visibleInput.trigger(event);
+      expect(startingInput.taggy('tags')).toEqual(["a","b","hello"]);
+
     });
   });
   describe("Removing tags", function(){
@@ -255,6 +318,11 @@ describe("Taggy", function() {
         expect(startingInput.taggy('selection')).toBeUndefined();
       });
     });
+    it("should clear selection on focusout", function(){
+      startingInput.taggy('selection', "middle");
+      visibleInput.closest('ul').find('input.taggy-focus-holder').trigger('focusout');
+      expect(startingInput.taggy('selection')).toBeNull();
+    });
   });
 
   describe("Tab key", function(){
@@ -297,6 +365,31 @@ describe("Taggy", function() {
       ul.find('li:contains("first tag") a').click();
       expect(holder).toBeNull();
     });
+  });
+
+  describe("autocomplete", function(){
+    var availableTagsCalled;
+    var visibleInput;
+    beforeEach(function(){
+      availableTagsCalled = false;
+      startingInput.taggy({
+        availableTags : function availableTags(){
+                          avaiableTagsCalled = true;
+                          return ["tag 1", "tag 2", "tag 3"];
+                        }
+      });
+      visibleInput = startingInput.siblings('div.taggy').find('input.taggy-new-tag');
+    });
+    it("should decorate the input", function(){
+      expect(visibleInput.data('autocomplete')).toBeTruthy();
+    });
+    // it("should call the available tags callback on search", function(){
+      // visibleInput.autocomplete("search");
+      // var source = visibleInput.data('autocompleteSource');
+      // console.log(source);
+      // source();
+      // expect(availableTagsCalled).toBe(true);
+    // });
   });
 
 });
