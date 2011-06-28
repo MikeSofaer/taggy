@@ -401,6 +401,27 @@ describe("Taggy", function() {
     });
   });
 
+  describe("Escape key", function(){
+    var visibleInput;
+    var event, openEvent, closeEvent;
+    beforeEach(function(){
+      event = $.Event('keydown');
+      event.keyCode = $.ui.keyCode.ESCAPE;
+      openEvent = $.Event('autocompleteopen');
+      closeEvent = $.Event('autocompleteclose');
+      startingInput.taggy({ availableTags : function(){ return ["go to the vats"]; } })
+      visibleInput = startingInput.siblings('div.taggy').find('input.taggy-new-tag');
+      visibleInput.val('vats').autocomplete('search');
+      visibleInput.trigger(openEvent);
+    });
+    it("should set the term to empty string if menu is closed", function(){
+      expect(visibleInput.trigger(closeEvent).trigger(event).data('autocomplete').term).toBe('');
+    });
+    it("should not set the term to empty string if menu is open", function(){
+      expect(visibleInput.trigger(event).data('autocomplete').term).toBe('vats');
+    });
+  });
+
   describe("Click Handler", function(){
     var holder;
     var ul;
