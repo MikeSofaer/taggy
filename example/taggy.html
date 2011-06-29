@@ -17,6 +17,9 @@
       tags : ["one", "two", "pony"],
       availableTags : function(){ return ["once", "before", "highly magnetic"]},
       additionalKeyCodes : [$.ui.keyCode.TAB, $.ui.keyCode.COMMA],
+      autocompleteOptions : {
+        minLength : 0
+      }
     });
     $('#tags2').taggy({
       tags : ["kittens", "unicorns", "bacon"],

@@ -47,6 +47,7 @@ div.taggy {
 ul.ui-menu {
   width               : 400px;
   border              : 1px solid black;
+  background-color    : white;
 }
 
 ul.ui-menu li {
