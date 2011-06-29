@@ -331,6 +331,13 @@ describe("Taggy", function() {
       expect(startingInput.taggy('tags')).toEqual([]);
     });
 
+    it("should prevent default on backspace", function(){
+      var event = $.Event('keydown');
+      event.keyCode = $.ui.keyCode.BACKSPACE;
+      startingInput.taggy().siblings('div.taggy').trigger(event);
+      expect(event.isDefaultPrevented()).toBe(true);
+    });
+
   });
 
   describe("selecting UI", function(){
