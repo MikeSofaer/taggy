@@ -79,6 +79,11 @@ describe("Taggy", function() {
       startingInput.taggy({tags : ["a", "b"]}).taggy('addTag', "hello");
       expect(startingInput.taggy('tags')).toEqual(["a","b","hello"]);
     });
+    it("should escape the text", function(){
+      startingInput.taggy().taggy('addTag', "<");
+      var li = startingInput.siblings('div.taggy').find('li');
+      expect(li.html().indexOf("&lt;") == -1).toBe(false);
+    });
 
   });
 
