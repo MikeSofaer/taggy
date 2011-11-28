@@ -101,6 +101,7 @@
 
   <script>
     $('#taggy-is').taggy({
+      tags : ["awesome", "tested", "MIT-licensed"],
       availableTags : function(){ return ["awesome", "tested", "MIT-licensed", "great", "wonderful", "OK", "like butter"]},
       additionalKeyCodes : [$.ui.keyCode.TAB, $.ui.keyCode.COMMA],
       autocompleteOptions : {
@@ -108,10 +109,12 @@
       }
     });
     $('#taggy-actions').taggy({
+      tags : ["fork it","use it"],
       availableTags : function(){ return ["fork it","use it","blog it","run the tests"]},
       additionalKeyCodes : [$.ui.keyCode.TAB, $.ui.keyCode.COMMA],
     });
     $('#taggy-deps').taggy({
+      tags : ["jquery","jquery-ui"],
       availableTags : function(){ return ["jquery","jquery-ui","imagination","fun-loving attitude"]},
       additionalKeyCodes : [$.ui.keyCode.TAB, $.ui.keyCode.COMMA],
     });
